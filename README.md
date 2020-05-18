@@ -31,7 +31,7 @@ Tout le système est embarqué sur une carte Raspberry PI 4B+, Raspbian BUSTER.
 ![image](https://user-images.githubusercontent.com/6602774/82240232-59162d80-993a-11ea-8f8e-c7d3cfde2a7c.png)
 
 
-Détail des choix techniques pour la partie Ordonaceur :
+Détail des choix techniques pour la partie Ordonanceur :
 
 * [Golang] - Conservation de la continuité des développements entrepris par la section [Unité de contrôle]. Il était plus simple, plus rapide de conserver le même langage entre ces deux modules fortement liés par le biais des composants RPC.
 * [RPC] - Une des méthodes de communication les plus rapide 
