@@ -1,0 +1,21 @@
+{
+    "state_machine":[
+        {
+            "name":NAME,
+            "on_event": EVENT_ID,
+            "description": DEFINITION,
+
+            "outcomes" : [
+                {"result" : RESULT_ID, "next_state": EVENT_ID},
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "precall" : PRECALLBACK_NAME
+                "call" : CALLBACK_NAME,
+                "postcall" : POSTCALLBACK_NAME
+            }
+        }
+    ]
+}
+
+
