@@ -1,4 +1,4 @@
-# locuste.service.osm
+# Locuste Map Scheduler : locuste.service.osm
 LOCUSTE : Service ordonnanceur / Pilotage automatique / Gestionnaire de vol
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0f2fd8eb4b2149ae85807192e515e7ac)](https://www.codacy.com/manual/axel.maciejewski/locuste.service.osm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DaemonToolz/locuste.service.osm&amp;utm_campaign=Badge_Grade)
