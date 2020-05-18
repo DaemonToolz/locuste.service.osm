@@ -19,7 +19,7 @@ Le project Locuste se divise en 3 grandes sections :
 * Interface graphique (UI) ANGULAR
 
 
-![image](https://user-images.githubusercontent.com/6602774/82243830-8960ca80-9940-11ea-917e-15585f178c6d.png)
+![Composants](https://user-images.githubusercontent.com/6602774/82243830-8960ca80-9940-11ea-917e-15585f178c6d.png)
 
 Tout le système est embarqué sur une carte Raspberry PI 4B+, Raspbian BUSTER.
 * Golang 1.11.2
@@ -28,7 +28,7 @@ Tout le système est embarqué sur une carte Raspberry PI 4B+, Raspbian BUSTER.
 * Dépendance forte avec la SDK OLYMPE PARROT : (https://developer.parrot.com/docs/olympe/, https://github.com/Parrot-Developers/olympe)
 
 
-![image](https://user-images.githubusercontent.com/6602774/82240232-59162d80-993a-11ea-8f8e-c7d3cfde2a7c.png)
+![Vue globale](https://user-images.githubusercontent.com/6602774/82240232-59162d80-993a-11ea-8f8e-c7d3cfde2a7c.png)
 
 
 Détail des choix techniques pour la partie Ordonanceur :
@@ -36,3 +36,5 @@ Détail des choix techniques pour la partie Ordonanceur :
 * [Golang] - Conservation de la continuité des développements entrepris par la section [Unité de contrôle]. Il était plus simple, plus rapide de conserver le même langage entre ces deux modules fortement liés par le biais des composants RPC.
 * [RPC] - Une des méthodes de communication les plus rapide 
 
+
+![Détail de l'initialisation](https://user-images.githubusercontent.com/6602774/82245150-b910d200-9942-11ea-83ab-815dd1db7ee8.png)
