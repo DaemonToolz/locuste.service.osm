@@ -18,6 +18,16 @@ Le project Locuste se divise en 3 grandes sections :
 * Unité de planification de vol / Ordonanceur (Scheduler) GOLANG
 * Interface graphique (UI) ANGULAR
 
+
+![image](https://user-images.githubusercontent.com/6602774/82243830-8960ca80-9940-11ea-917e-15585f178c6d.png)
+
+Tout le système est embarqué sur une carte Raspberry PI 4B+, Raspbian BUSTER.
+* Golang 1.11.2
+* Angular 9
+* Python 3.7
+* Dépendance forte avec la SDK OLYMPE PARROT : (https://developer.parrot.com/docs/olympe/, https://github.com/Parrot-Developers/olympe)
+
+
 ![image](https://user-images.githubusercontent.com/6602774/82240232-59162d80-993a-11ea-8f8e-c7d3cfde2a7c.png)
 
 
