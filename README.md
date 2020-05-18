@@ -23,6 +23,6 @@ Le project Locuste se divise en 3 grandes sections :
 
 Détail des choix techniques pour la partie Ordonaceur :
 
-[Golang] - Conservation de la continuité des développements entrepris par la section [Unité de contrôle]. Il était plus simple, plus rapide de conserver le même langage entre ces deux modules fortement liés par le biais des composants RPC.
-[RPC] - Une des méthodes de communication les plus rapide 
+* [Golang] - Conservation de la continuité des développements entrepris par la section [Unité de contrôle]. Il était plus simple, plus rapide de conserver le même langage entre ces deux modules fortement liés par le biais des composants RPC.
+* [RPC] - Une des méthodes de communication les plus rapide 
 
