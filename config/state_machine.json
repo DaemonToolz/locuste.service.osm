@@ -1,0 +1,196 @@
+{
+    "state_machine":[
+        {
+            "name":"StartingPointDefined",
+            "on_event": 2,
+            "description": "Définition du point de démarrage",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 3},
+                {"result" : 4, "next_state": 3},
+                {"result" : 6, "next_state": 3},
+                {"result" : 0, "next_state": 1}
+                
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "precall": "UpdateFlyingState",
+                "call" : "DefineStartingPoint",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+        {
+            "name":"NewRouteAvailable",
+            "on_event": 3,
+            "description":  "Une nouvelle route a été trouvée",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 1},
+                {"result" : 2, "next_state": 13}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "precall": "UpdateFlyingState",
+                "call" : "SetNewRoute"
+            }
+        },
+        {
+            "name":"PositionReached",
+            "on_event": 4,
+            "description":  "La dernière coordonnée a été atteinte",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 1},
+                {"result" : 2, "next_state": 13},
+                {"result" : 3, "next_state": 12}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "precall": "UpdateFlyingState",
+                "call" : "SetPositionReached"
+            }
+        },
+        {
+            "name":"OnDestinationReached",
+            "on_event": 12,
+            "description": "La destination a été atteinte",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 1}
+            ],
+            "incomes"  : [4],
+            "callbacks" : {
+                "call" : "SetDestinationReached"
+            }
+        },
+        {
+            "name":"OnTargetDefined",
+            "on_event": 10,
+            "description": "Nouvelle destination définie",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 2}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetTargetDefined",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+        {
+            "name":"SwitchedToManual",
+            "on_event": 5,
+            "description": "Bascule en mode manuel",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 1}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetManual",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+        {
+            "name":"SwitchedToAutomatic",
+            "on_event": 6,
+            "description": "Bascule en mode Pilotage Automatique",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 2}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetAutomatic",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+        {
+            "name":"OnSimulation",
+            "on_event": 7,
+            "description": "Bascule en mode simulation",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 2}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetSimulation",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+        {
+            "name":"OnNormal",
+            "on_event": 8,
+            "description": "Bascule en mode normal",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 2}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetNormal",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+        {
+            "name":"AskForUpdate",
+            "on_event": 13,
+            "description": "Force la demande de mise à jour",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 1}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetUpdate"
+            }
+        },
+
+        {
+            "name":"SetAutopilotOn",
+            "on_event": 14,
+            "description": "Activation du pilote automatique",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 2}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetAutopilotOn",
+                "postcall" : "UpdateMapStatus"
+            }
+        },
+
+        {
+            "name":"SetAutopilotOff",
+            "on_event": 15,
+            "description": "Désactivation du pilote automatique",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 2}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "SetAutopilotOff",
+                "postcall" : "UpdateMapStatus"
+            }
+        } ,{
+            "name":"OnLastCommandSuccess",
+            "on_event": 22,
+            "description": "La dernière commande envoyée est en état succès",
+
+            "outcomes" : [
+                {"result" : 1, "next_state": 1},
+                {"result" : 8, "next_state": 4},
+                {"result" : 9, "next_state": 3}
+            ],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "OnLastCommandSuccess"
+            }
+        }
+    ]
+}
+
+

@@ -93,7 +93,7 @@ func openConnection() *rpc.Client {
 	}
 
 	if client != nil {
-		client.Go("RPCRegistry.Register", &myself, nil, nil)
+		client.Go("RPCRegistry.Register", &myself, &RPCNullArg, nil)
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func Unregister() {
 	}()
 
 	if client != nil {
-		client.Go("RPCRegistry.Disconnect", &myself, nil, nil)
+		client.Go("RPCRegistry.Disconnect", &myself, &RPCNullArg, nil)
 	}
 	AddOrUpdateStatus(SchedulerRPC, false)
 }
@@ -115,35 +115,42 @@ func Unregister() {
 // TransmitCoordinates Envoyer des nouvelles coordonnées à l'unité contrôle
 func TransmitCoordinates(coordinate *DroneFlightCoordinates) {
 	if client != nil {
-		client.Go("RPCRegistry.SendCoordinates", coordinate, nil, nil)
+		client.Go("RPCRegistry.SendCoordinates", coordinate, &RPCNullArg, nil)
 	}
 }
 
 // TransmitTarget Transmet la cible recalculée
 func TransmitTarget(coordinate *FlightCoordinate) {
 	if client != nil {
-		client.Go("RPCRegistry.DefineTarget", coordinate, nil, nil)
+		client.Go("RPCRegistry.DefineTarget", coordinate, &RPCNullArg, nil)
 	}
 }
 
 // TransmitEdge Deprecated: Permet d'envoyer les liaisons à l'unité de contrôle
 func TransmitEdge(coordinate *FlightCoordinate) {
 	if client != nil {
-		client.Go("RPCRegistry.DefineEdge", coordinate, nil, nil)
+		client.Go("RPCRegistry.DefineEdge", coordinate, &RPCNullArg, nil)
 	}
 }
 
 // TransmitAutopilotUpdate Transmet les mises à jour du pilote automatique
 func TransmitAutopilotUpdate(input *SchedulerSummarizedData) {
 	if client != nil {
-		client.Go("RPCRegistry.UpdateAutopilot", input, nil, nil)
+		client.Go("RPCRegistry.UpdateAutopilot", input, &RPCNullArg, nil)
+	}
+}
+
+// TransmitEvent Transmet une commande
+func TransmitEvent(command *DroneCommandMessage) {
+	if client != nil {
+
 	}
 }
 
 // TransmitBounds Transmet les bords de la carte
 func TransmitBounds(boundaries *FlightBounds) {
 	if client != nil {
-		client.Go("RPCRegistry.DefineBoundaries", boundaries, nil, nil)
+		client.Go("RPCRegistry.DefineBoundaries", boundaries, &RPCNullArg, nil)
 	}
 }
 

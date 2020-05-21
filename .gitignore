@@ -1,5 +1,5 @@
 *.log
-*.json
+appConfig.json
 *.mod
 *.sum
 locuste.service.osm

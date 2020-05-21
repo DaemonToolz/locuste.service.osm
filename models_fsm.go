@@ -5,13 +5,30 @@ import (
 	"log"
 )
 
+// FuncResult Résultat d'un événement de séquenceur
 type FuncResult int
 
 const (
-	OnError        FuncResult = iota
-	OnSuccess      FuncResult = iota
+	// OnError Résultat d'erreur
+	OnError FuncResult = iota
+	// OnSuccess Résultat OnSuccess
+	OnSuccess FuncResult = iota
+	// UpdateRequired On demande une mise à jour
 	UpdateRequired FuncResult = iota
-	OnTerminated   FuncResult = iota
+	// OnTerminated En cas de fin du circuit
+	OnTerminated FuncResult = iota
+	// TakeOffRequired Le drone est au sol
+	TakeOffRequired FuncResult = iota
+	// LandingRequired Le drone doit atterrir
+	LandingRequired FuncResult = iota
+	// MoveInterruptRequired Le drone doit s'arrêter
+	MoveInterruptRequired FuncResult = iota
+	// StatusCheckRequired On va faire un check-up pour connaitre l'état de vol
+	StatusCheckRequired FuncResult = iota
+	// ResumeInstruction On reprend la commande d'origine
+	ResumeInstruction FuncResult = iota
+	// DroneReady Le drone est prêt et on peut procéder
+	DroneReady FuncResult = iota
 )
 
 // Event Type d'évènement
@@ -46,10 +63,24 @@ const (
 	OnDestinationReached Event = iota
 	// AskForUpdate Demande de mise à jour (état interne)
 	AskForUpdate Event = iota
-	// OnAutopilotOn On ne fait rien
+	// OnAutopilotOn On active le pilote automatique
 	OnAutopilotOn Event = iota
-	// OnAutopilotOff On ne fait rien
+	// OnAutopilotOff On désactive le pilote automatique
 	OnAutopilotOff Event = iota
+	// OnDroneStatusCheckup On demande le checkup
+	OnDroneStatusCheckup Event = iota
+	// OnTakeOff On demande le décollage
+	OnTakeOff Event = iota
+	// OnLanding On demande le l'atterrissage
+	OnLanding Event = iota
+	// OnGoHome On demande le retour maison
+	OnGoHome Event = iota
+	// OnPreparing On est en cours de prépration
+	OnPreparing Event = iota
+	// OnFlyingStateUpdate Mise à jour du dernier état de vol
+	OnFlyingStateUpdate Event = iota
+	// OnCommandSuccessEvent On indique le succès du dernier événement
+	OnCommandSuccessEvent Event = iota
 )
 
 // FlightStateMachine Machine à état du pilote automatique

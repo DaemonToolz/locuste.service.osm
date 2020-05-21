@@ -7,6 +7,7 @@ import (
 )
 
 // Refactoring à prévoir
+
 // SchedulerSummarizedData Informations réduites pour les autopilotes (utilisé en communication Brain <=> Scheduler)
 type SchedulerSummarizedData struct {
 	DroneName   string `json:"drone_name"`
@@ -18,11 +19,25 @@ type SchedulerSummarizedData struct {
 	IsBusy      bool   `json:"is_busy"`
 }
 
+// DroneSummarizedStatus Informations réduites relatif aux drones (états de vol)
+type DroneSummarizedStatus struct {
+	DroneName      string              `json:"drone_name"`
+	IsPreparing    bool                `json:"is_preparing"`
+	IsMoving       bool                `json:"is_moving"`
+	IsHovering     bool                `json:"is_hovering"`
+	IsLanded       bool                `json:"is_landed"`
+	IsGoingHome    bool                `json:"is_going_home"`
+	ReceivedStatus PyDroneFlyingStatus `json:"last_status"`
+}
+
 // SchedulerData Informations de l'autopîlote / planificateur de vol
 type SchedulerData struct {
 	DroneName            string
 	OperationIndex       int
+	LastCommand          DroneCommand
+	IntermediateCommand  DroneCommand
 	Statuses             *SchedulerSummarizedData
+	DroneFlyingStatus    *DroneSummarizedStatus
 	CurrentInstruction   *DroneFlightCoordinates
 	Target               *Node
 	SimulatedCoordinates *FlightCoordinate

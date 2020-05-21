@@ -1,4 +1,4 @@
-package main;
+package main
 
 // DroneCommand Commande disponible pour le drone
 type DroneCommand string
@@ -11,37 +11,60 @@ const (
 	GoTo DroneCommand = "AutomaticGoTo"
 	// Stop Annulation du déplacment automatique
 	Stop DroneCommand = "AutomaticCancelGoTo"
-	// CamDown Rotation à 180°C de la caméra
-	CamDown DroneCommand = "AutomaticSetCameraDown"
-	// CamStd Remise à 0 zéro de la caméra
-	CamStd DroneCommand = "AutomaticSetStandardCamera"
 	// TakeOff Décollage
-	TakeOff  DroneCommand= "CommonTakeOff"
-	// GoHome ORdre de retour à la maison
-	GoHome DroneCommand = "CommonGoHome"
+	TakeOff DroneCommand = "AutomaticTakeOff"
+	// GoHome Ordre de retour à la maison
+	GoHome DroneCommand = "AutomaticGoHome"
+	// Land Ordre d'atterrissage
+	Land DroneCommand = "AutomaticLanding"
+	// NoCommand Aucun ordre
+	NoCommand DroneCommand = "NoCommand"
 )
-
 
 // DroneCommandMessage Ordre à envoyer aux drones
 type DroneCommandMessage struct {
-	// Name Nom del a commande
-	Name DroneCommand `json:"name"`
-	// Params paramètres de la commande
-	Params interface{}  `json:"params"`
+	// Name Nom de la commande
+	Name DroneCommand `json:"command"`
+	// Drone cible
+	Target string `json:"name"`
 }
 
 // DroneFlightCoordinates Coordonnées de vol
 type DroneFlightCoordinates struct {
-	DroneName string `json:"drone_name"`
+	DroneName string            `json:"drone_name"`
 	Component *FlightCoordinate `json:"coordinates"`
-	Metadata  *NodeMetaData `json:"metadata"`
+	Metadata  *NodeMetaData     `json:"metadata"`
 }
 
 // NodeMetaData Métadonnées de vol
-type NodeMetaData struct{
-	Name string `json:"street_name"`
-	Distance float64 `json:"distance"`
-	Altitude float64 `json:"altitude"`
+type NodeMetaData struct {
+	Name     string           `json:"street_name"`
+	Distance float64          `json:"distance"`
+	Altitude float64          `json:"altitude"`
 	Previous FlightCoordinate `json:"previous"`
-	Next FlightCoordinate `json:"next"`
+	Next     FlightCoordinate `json:"next"`
 }
+
+// PyDroneFlyingStatus Type d'état de vol
+type PyDroneFlyingStatus int
+
+const (
+	// Landed Etat
+	Landed PyDroneFlyingStatus = iota
+	// TakingOff Etat
+	TakingOff PyDroneFlyingStatus = iota
+	// Hovering Etat
+	Hovering PyDroneFlyingStatus = iota //
+	// Flying Etat
+	Flying PyDroneFlyingStatus = iota
+	// Emergency Etat
+	Emergency PyDroneFlyingStatus = iota
+	// UserTakeOff Etat
+	UserTakeOff PyDroneFlyingStatus = iota
+	// MotorRamping Etat
+	MotorRamping PyDroneFlyingStatus = iota
+	// EmergencyLanding Etat
+	EmergencyLanding PyDroneFlyingStatus = iota
+	// None Aucun Etat
+	None PyDroneFlyingStatus = iota
+)

@@ -8,6 +8,9 @@ import (
 // FlightScheduler Il déterminera les ordres de vols
 var FlightScheduler map[string]SchedulerData
 
+// DroneFlyingStatus Etat de vol pour chaque drone
+var DroneFlyingStatus map[string]PyDroneFlyingStatus
+
 // DroneInitialPositions Position initiale de chaque drone
 var DroneInitialPositions map[string]FlightCoordinate
 
@@ -17,17 +20,21 @@ var SchedulerTarget map[string]FlightCoordinate
 var accessMutex sync.Mutex
 var positionMutex sync.Mutex
 var targetMutex sync.Mutex
+var flyingStatMutex sync.Mutex
 
 func initFlightSchedulerWorker() {
 	log.Println("Initialisation de l'autopilote pour chaque drone")
 	FlightScheduler = make(map[string]SchedulerData)
 	DroneInitialPositions = make(map[string]FlightCoordinate)
 	SchedulerTarget = make(map[string]FlightCoordinate)
+	DroneFlyingStatus = make(map[string]PyDroneFlyingStatus)
 
 	for _, name := range ExtractDroneNames() {
 		channel := make(chan Event)
 		sd := SchedulerData{
-			DroneName: name,
+			DroneName:           name,
+			LastCommand:         NoCommand,
+			IntermediateCommand: NoCommand,
 			Statuses: &SchedulerSummarizedData{
 				DroneName:   name,
 				IsReady:     false,
@@ -36,6 +43,15 @@ func initFlightSchedulerWorker() {
 				IsSimulated: false,
 				IsBusy:      false,
 				IsActive:    false,
+			},
+			DroneFlyingStatus: &DroneSummarizedStatus{
+				DroneName:      name,
+				IsMoving:       false,
+				IsHovering:     false,
+				IsLanded:       true, // Notre état par défaut, au sol
+				IsGoingHome:    false,
+				IsPreparing:    true,
+				ReceivedStatus: None,
 			},
 			OperationIndex:     0,
 			CurrentInstruction: nil,
@@ -183,7 +199,8 @@ func StopSchedulers() {
 func OnCommandSuccess(identifier DroneIdentifier) {
 	scheduler := GetScheduler(identifier.Name)
 	if &scheduler != nil {
-		scheduler.SendEvent(PositionReached)
+		scheduler.SendEvent(OnCommandSuccessEvent)
+		//scheduler.SendEvent(PositionReached) //
 	}
 }
 
@@ -257,5 +274,22 @@ func GetSchedulerTarget(name string) FlightCoordinate {
 	targetMutex.Lock()
 	defer targetMutex.Unlock()
 	return SchedulerTarget[name]
+
+}
+
+// UpdateFlyingStatus Mise à jour de la cible (drone)
+func UpdateFlyingStatus(name string, input PyDroneFlyingStatus) {
+	flyingStatMutex.Lock()
+	DroneFlyingStatus[name] = input
+	flyingStatMutex.Unlock()
+	SendEventToScheduler(name, OnFlyingStateUpdate)
+	log.Println("Mise à jour des informations de vol ", name)
+}
+
+// GetFlyingStatus Récupère la cible
+func GetFlyingStatus(name string) PyDroneFlyingStatus {
+	flyingStatMutex.Lock()
+	defer flyingStatMutex.Unlock()
+	return DroneFlyingStatus[name]
 
 }
