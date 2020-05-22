@@ -17,10 +17,14 @@ var DroneInitialPositions map[string]FlightCoordinate
 // SchedulerTarget Position cible pour chaque drone
 var SchedulerTarget map[string]FlightCoordinate
 
+// LastAcknowledge Derniers "on_command_success" remontés
+var LastAcknowledge map[string]DroneCommand
+
 var accessMutex sync.Mutex
 var positionMutex sync.Mutex
 var targetMutex sync.Mutex
 var flyingStatMutex sync.Mutex
+var lastCmdMutex sync.Mutex
 
 func initFlightSchedulerWorker() {
 	log.Println("Initialisation de l'autopilote pour chaque drone")
@@ -28,6 +32,7 @@ func initFlightSchedulerWorker() {
 	DroneInitialPositions = make(map[string]FlightCoordinate)
 	SchedulerTarget = make(map[string]FlightCoordinate)
 	DroneFlyingStatus = make(map[string]PyDroneFlyingStatus)
+	LastAcknowledge = make(map[string]DroneCommand)
 
 	for _, name := range ExtractDroneNames() {
 		channel := make(chan Event)
@@ -66,7 +71,8 @@ func initFlightSchedulerWorker() {
 		}
 		sd.InitStateMachine()
 		UpdateMapStatus(name, sd)
-
+		// TODO : Lancer le service de recharge du séquenceur pour mettre à jour la machine à état
+		// Sans devoir relancer tout le programme
 		go StartWorker(name)
 	}
 }
@@ -195,10 +201,11 @@ func StopSchedulers() {
 	}
 }
 
-// OnCommandSuccess Interruption des autopilotes
-func OnCommandSuccess(identifier DroneIdentifier) {
+// OnCommandSuccess Succès de la dernière commande
+func OnCommandSuccess(identifier CommandIdentifier) {
 	scheduler := GetScheduler(identifier.Name)
 	if &scheduler != nil {
+		UpdateLastSuccess(identifier.Name, identifier.Command)
 		scheduler.SendEvent(OnCommandSuccessEvent)
 		//scheduler.SendEvent(PositionReached) //
 	}
@@ -291,5 +298,21 @@ func GetFlyingStatus(name string) PyDroneFlyingStatus {
 	flyingStatMutex.Lock()
 	defer flyingStatMutex.Unlock()
 	return DroneFlyingStatus[name]
+
+}
+
+// UpdateLastSuccess Mise à jour de la cible (drone)
+func UpdateLastSuccess(name string, input DroneCommand) {
+	lastCmdMutex.Lock()
+	LastAcknowledge[name] = input
+	lastCmdMutex.Unlock()
+	log.Println("Mise à jour des informations de vol ", name)
+}
+
+// GetLastSuccess Récupère la cible
+func GetLastSuccess(name string) DroneCommand {
+	lastCmdMutex.Lock()
+	defer lastCmdMutex.Unlock()
+	return LastAcknowledge[name]
 
 }

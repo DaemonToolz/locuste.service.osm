@@ -47,7 +47,7 @@ func RestartRPCServer() {
 }
 
 // RequestStatuses Fonction pour requêter les statuts des modules internes
-func (_ *RPCRegistry) RequestStatuses(_ *struct{}, reply *map[Component]bool) error {
+func (*RPCRegistry) RequestStatuses(_ *struct{}, reply *map[Component]bool) error {
 	for key := range GlobalStatuses {
 		(*reply)[key] = GlobalStatuses[key]
 	}
@@ -55,13 +55,13 @@ func (_ *RPCRegistry) RequestStatuses(_ *struct{}, reply *map[Component]bool) er
 }
 
 // OnCommandSuccess En cas de succès de la commande précédemment envoyée
-func (_ *RPCRegistry) OnCommandSuccess(args *DroneIdentifier, _ *struct{}) error {
+func (*RPCRegistry) OnCommandSuccess(args *CommandIdentifier, _ *struct{}) error {
 	go OnCommandSuccess(*args)
 	return nil
 }
 
 // UpdateAutopilot En cas de mise à jour du pilote automatique
-func (_ *RPCRegistry) UpdateAutopilot(input *SchedulerSummarizedData, _ *struct{}) error {
+func (*RPCRegistry) UpdateAutopilot(input *SchedulerSummarizedData, _ *struct{}) error {
 	myInput := *input
 	log.Println("Demande de mise à jour du pilote automatique", myInput)
 	go SendUpdateToScheduler(myInput)
@@ -69,7 +69,7 @@ func (_ *RPCRegistry) UpdateAutopilot(input *SchedulerSummarizedData, _ *struct{
 }
 
 // UpdateTarget En cas de mise à jour de la destination
-func (_ *RPCRegistry) UpdateTarget(input *FlightCoordinate, _ *struct{}) error {
+func (*RPCRegistry) UpdateTarget(input *FlightCoordinate, _ *struct{}) error {
 	target := *input
 	go func(coordinates FlightCoordinate) {
 		UpdateSchedulerTarget(coordinates)
@@ -79,13 +79,13 @@ func (_ *RPCRegistry) UpdateTarget(input *FlightCoordinate, _ *struct{}) error {
 }
 
 // GetTarget En cas de demande de la dernière destination
-func (_ *RPCRegistry) GetTarget(args *DroneIdentifier, reply *FlightCoordinate) error {
+func (*RPCRegistry) GetTarget(args *DroneIdentifier, reply *FlightCoordinate) error {
 	*reply = GetSchedulerTarget(args.Name)
 	return nil
 }
 
 // GetBoundaries Récupère les bords
-func (_ *RPCRegistry) GetBoundaries(_ *struct{}, reply *FlightBounds) error {
+func (*RPCRegistry) GetBoundaries(_ *struct{}, reply *FlightBounds) error {
 	if streetDataSet.Boundaries == nil {
 		*reply = FlightBounds{}
 	} else {
@@ -95,7 +95,7 @@ func (_ *RPCRegistry) GetBoundaries(_ *struct{}, reply *FlightBounds) error {
 }
 
 // RestartModule Demande de redémarrage d'un module
-func (_ *RPCRegistry) RestartModule(args *string, _ *struct{}) error {
+func (*RPCRegistry) RestartModule(args *string, _ *struct{}) error {
 	log.Println("Demande de redémarrage du module :", *args)
 	return nil
 }

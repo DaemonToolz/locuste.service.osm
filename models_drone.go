@@ -21,6 +21,13 @@ const (
 	NoCommand DroneCommand = "NoCommand"
 )
 
+// CommandIdentifier Le "acknowledge" d'un drone pour une commande spécifique
+// Envoyé par le drone
+type CommandIdentifier struct {
+	Name    string       `json:"name"`
+	Command DroneCommand `json:"command"`
+}
+
 // DroneCommandMessage Ordre à envoyer aux drones
 type DroneCommandMessage struct {
 	// Name Nom de la commande

@@ -82,9 +82,8 @@ func (sd *SchedulerData) DefineStartingPoint() FuncResult {
 		}
 
 		return OnSuccess
-	} else {
-		return OnError
 	}
+	return OnError
 }
 
 // SendIntermediateCommand On envoi la commande intermédiaire avant la commande finale
@@ -115,9 +114,9 @@ func (sd *SchedulerData) SetNewRoute() FuncResult {
 func (sd *SchedulerData) SetPositionReached() FuncResult {
 	if !sd.Statuses.IsManual {
 		log.Println("Position atteinte : ", sd.DroneName)
-		if sd.OperationIndex < len(*sd.Route) {
+		if sd.Route != nil && sd.OperationIndex < len(*sd.Route) {
 			sd.OperationIndex++
-			if sd.PrepareNextCoordinate() {
+			if sd.PrepareNextCoordinate() && sd.IntermediateCommand == NoCommand {
 				TransmitCoordinates(sd.CurrentInstruction)
 				return UpdateRequired
 			}
@@ -276,6 +275,13 @@ func (sd *SchedulerData) UpdateFlyingState() {
 
 // OnLastCommandSuccess La dernière commande envoyée est en succès
 func (sd *SchedulerData) OnLastCommandSuccess() FuncResult {
+	lastSuccess := GetLastSuccess(sd.DroneName)
+	UpdateLastSuccess(sd.DroneName, NoCommand)
+	log.Println("Dernière commande en succès pour ", sd.DroneName, " : ", lastSuccess)
+	if sd.IntermediateCommand != NoCommand && lastSuccess != sd.IntermediateCommand {
+		return OnSuccess // On passe en "Idle" directement
+	}
+
 	if sd.LastCommand != sd.IntermediateCommand && sd.IntermediateCommand != NoCommand {
 		sd.IntermediateCommand = NoCommand
 		return DroneReady
@@ -284,18 +290,6 @@ func (sd *SchedulerData) OnLastCommandSuccess() FuncResult {
 	if sd.LastCommand == GoTo {
 		return ResumeInstruction
 	}
-
-	return OnSuccess
-}
-
-// OnUserTakeOff Décollage par l'utilisateur
-func (sd *SchedulerData) OnUserTakeOff() FuncResult {
-
-	return OnSuccess
-}
-
-// OnUserLanding Atterrissage par l'utilisateur
-func (sd *SchedulerData) OnUserLanding() FuncResult {
 
 	return OnSuccess
 }

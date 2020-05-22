@@ -43,41 +43,42 @@ func initRPCClient() {
 	pulse = time.NewTicker(1 * time.Second)
 	stopCondition = make(chan bool)
 	openConnection()
-	go func() {
-		for {
-			select {
-			case <-stopCondition:
-				log.Println("Connectiques RPC arrêtées")
+	go ping()
+	log.Println("Connectiques RPC initialisés")
+}
 
-				return
-			case <-pulse.C:
-				if client != nil {
-					accessCall := client.Go("RPCRegistry.Ping", &RPCNullArg, &ModuleToRestart, nil)
-					replyCall := <-accessCall.Done
+func ping() {
+	for {
+		select {
+		case <-stopCondition:
+			log.Println("Connectiques RPC arrêtées")
 
-					if client == nil {
-						log.Println("La connexion n'était pas initialisée")
-						openConnection()
-					} else if replyCall.Error == rpc.ErrShutdown || reflect.TypeOf(replyCall.Error) == reflect.TypeOf((*rpc.ServerError)(nil)).Elem() {
-						log.Println("Une erreur liée au serveur a été remonté")
-						log.Println(replyCall.Error)
-						openConnection()
-					}
+			return
+		case <-pulse.C:
+			if client != nil {
+				accessCall := client.Go("RPCRegistry.Ping", &RPCNullArg, &ModuleToRestart, nil)
+				replyCall := <-accessCall.Done
 
-				} else {
+				if client == nil {
+					log.Println("La connexion n'était pas initialisée")
+					openConnection()
+				} else if replyCall.Error == rpc.ErrShutdown || reflect.TypeOf(replyCall.Error) == reflect.TypeOf((*rpc.ServerError)(nil)).Elem() {
+					log.Println("Une erreur liée au serveur a été remonté")
+					log.Println(replyCall.Error)
 					openConnection()
 				}
 
-				if ModuleToRestart != "" {
-					CallModuleRestart(Component(ModuleToRestart))
-				}
-
-				ModuleToRestart = ""
+			} else {
+				openConnection()
 			}
-		}
-	}()
 
-	log.Println("Connectiques RPC initialisés")
+			if ModuleToRestart != "" {
+				CallModuleRestart(Component(ModuleToRestart))
+			}
+
+			ModuleToRestart = ""
+		}
+	}
 }
 
 func openConnection() *rpc.Client {
@@ -143,7 +144,7 @@ func TransmitAutopilotUpdate(input *SchedulerSummarizedData) {
 // TransmitEvent Transmet une commande
 func TransmitEvent(command *DroneCommandMessage) {
 	if client != nil {
-
+		client.Go("RPCRegistry.RPCSendCommand", command, &RPCNullArg, nil)
 	}
 }
 

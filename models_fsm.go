@@ -81,6 +81,8 @@ const (
 	OnFlyingStateUpdate Event = iota
 	// OnCommandSuccessEvent On indique le succès du dernier événement
 	OnCommandSuccessEvent Event = iota
+	// IntermerdiateOrderRequired  Ordre intermédiaire requis avant de procéder
+	IntermerdiateOrderRequired Event = iota
 )
 
 // FlightStateMachine Machine à état du pilote automatique
