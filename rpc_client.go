@@ -52,7 +52,7 @@ func ping() {
 		select {
 		case <-stopCondition:
 			log.Println("Connectiques RPC arrêtées")
-
+			close(stopCondition)
 			return
 		case <-pulse.C:
 			if client != nil {
