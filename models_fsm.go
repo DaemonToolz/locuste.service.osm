@@ -245,6 +245,10 @@ func (state *State) Call() Event {
 		state.postcall.(func())()
 	}
 
+	if len(state.possibleStates) == 0 {
+		return Idle
+	}
+
 	return state.possibleStates[state.Result]
 
 }

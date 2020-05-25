@@ -94,8 +94,27 @@ func (*RPCRegistry) GetBoundaries(_ *struct{}, reply *FlightBounds) error {
 	return nil
 }
 
+// FlyingStatusUpdate mise à jour de l'état du drone (en vol)
+func (*RPCRegistry) FlyingStatusUpdate(data *DroneFlyingStatusMessage, _ *struct{}) error {
+	UpdateFlyingStatus(data.Name, data.Status)
+	return nil
+}
+
 // RestartModule Demande de redémarrage d'un module
 func (*RPCRegistry) RestartModule(args *string, _ *struct{}) error {
 	log.Println("Demande de redémarrage du module :", *args)
+	// TODO : Logique à implémenter
+	return nil
+}
+
+// SendGoHomeCommandTo Demander une commande "atterrissage" au drone nommé
+func (*RPCRegistry) SendGoHomeCommandTo(name *string, _ *struct{}) error {
+	SendEventToScheduler(*name, OnGoHome) // Implémenter la logique
+	return nil
+}
+
+// SendTakeoffCommandTo Demander une commande "décollage" au drone nommé
+func (*RPCRegistry) SendTakeoffCommandTo(name *string, _ *struct{}) error {
+	SendEventToScheduler(*name, OnTakeOff) // Implémenter la logique
 	return nil
 }

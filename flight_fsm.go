@@ -293,3 +293,33 @@ func (sd *SchedulerData) OnLastCommandSuccess() FuncResult {
 
 	return OnSuccess
 }
+
+// OnTakeOffEvent Décollage
+func (sd *SchedulerData) OnTakeOffEvent() FuncResult {
+	if sd.DroneFlyingStatus.IsLanded {
+		sd.LastCommand = TakeOff
+		sd.IntermediateCommand = NoCommand
+		payload := &DroneCommandMessage{
+			Name:   sd.LastCommand,
+			Target: sd.DroneName,
+		}
+		TransmitEvent(payload)
+		return OnSuccess
+	}
+	return OnError // On est déjà en vol
+}
+
+// OnGoHomeEvent Retour maison
+func (sd *SchedulerData) OnGoHomeEvent() FuncResult {
+	if sd.DroneFlyingStatus.IsLanded {
+		sd.LastCommand = GoHome
+		sd.IntermediateCommand = NoCommand
+		payload := &DroneCommandMessage{
+			Name:   sd.LastCommand,
+			Target: sd.DroneName,
+		}
+		TransmitEvent(payload)
+		return OnSuccess
+	}
+	return OnError
+}

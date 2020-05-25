@@ -27,6 +27,8 @@ type DroneSummarizedStatus struct {
 	IsHovering     bool                `json:"is_hovering"`
 	IsLanded       bool                `json:"is_landed"`
 	IsGoingHome    bool                `json:"is_going_home"`
+	IsHomeReady    bool                `json:"is_home_ready"`
+	IsGPSFixed     bool                `json:"is_gps_ready"`
 	ReceivedStatus PyDroneFlyingStatus `json:"last_status"`
 }
 

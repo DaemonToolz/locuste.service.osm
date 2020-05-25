@@ -14,7 +14,6 @@
             ],
             "incomes"  : [],
             "callbacks" : {
-                "precall": "UpdateFlyingState",
                 "call" : "DefineStartingPoint",
                 "postcall" : "UpdateMapStatus"
             }
@@ -30,7 +29,6 @@
             ],
             "incomes"  : [],
             "callbacks" : {
-                "precall": "UpdateFlyingState",
                 "call" : "SetNewRoute"
             }
         },
@@ -46,7 +44,6 @@
             ],
             "incomes"  : [],
             "callbacks" : {
-                "precall": "UpdateFlyingState",
                 "call" : "SetPositionReached"
             }
         },
@@ -55,9 +52,7 @@
             "on_event": 12,
             "description": "La destination a été atteinte",
 
-            "outcomes" : [
-                {"result" : 1, "next_state": 1}
-            ],
+            "outcomes" : [],
             "incomes"  : [4],
             "callbacks" : {
                 "call" : "SetDestinationReached"
@@ -82,9 +77,7 @@
             "on_event": 5,
             "description": "Bascule en mode manuel",
 
-            "outcomes" : [
-                {"result" : 1, "next_state": 1}
-            ],
+            "outcomes" : [],
             "incomes"  : [],
             "callbacks" : {
                 "call" : "SetManual",
@@ -138,9 +131,7 @@
             "on_event": 13,
             "description": "Force la demande de mise à jour",
 
-            "outcomes" : [
-                {"result" : 1, "next_state": 1}
-            ],
+            "outcomes" : [],
             "incomes"  : [],
             "callbacks" : {
                 "call" : "SetUpdate"
@@ -178,11 +169,9 @@
         },{
             "name":"OnFlyingStateUpdate",
             "on_event": 21,
-            "description": "La dernière commande envoyée est en état succès",
+            "description": "Demande de mise à jour des informations de vol",
 
-            "outcomes" : [
-                {"result" : 1, "next_state": 1}
-            ],
+            "outcomes" : [],
             "incomes"  : [],
             "callbacks" : {
                 "call" : "OnFlyingStateReceived"
@@ -206,12 +195,30 @@
             "on_event": 23,
             "description": "Envoi d'une commande intermédiaire, avant de procéder à la suite",
 
-            "outcomes" : [
-                {"result" : 1, "next_state": 1}
-            ],
+            "outcomes" : [],
             "incomes"  : [],
             "callbacks" : {
                 "call" : "SendIntermediateCommand"
+            }
+        },{
+            "name":"OnTakeOffEvent",
+            "on_event": 17,
+            "description": "Envoi d'une commande Take off",
+
+            "outcomes" : [],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "OnTakeOffEvent"
+            }
+        },{
+            "name":"OnGoHomeEvent",
+            "on_event": 19,
+            "description": "Envoi d'une commande Go Home",
+
+            "outcomes" : [],
+            "incomes"  : [],
+            "callbacks" : {
+                "call" : "OnGoHomeEvent"
             }
         }
     ]

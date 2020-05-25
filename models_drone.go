@@ -75,3 +75,9 @@ const (
 	// None Aucun Etat
 	None PyDroneFlyingStatus = iota
 )
+
+// DroneFlyingStatusMessage Message en provenance de l'unité de contrôle / Automtate Python
+type DroneFlyingStatusMessage struct {
+	Name   string              `json:"drone_name"`
+	Status PyDroneFlyingStatus `json:"status"`
+}
