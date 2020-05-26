@@ -21,15 +21,17 @@ type SchedulerSummarizedData struct {
 
 // DroneSummarizedStatus Informations réduites relatif aux drones (états de vol)
 type DroneSummarizedStatus struct {
-	DroneName      string              `json:"drone_name"`
-	IsPreparing    bool                `json:"is_preparing"`
-	IsMoving       bool                `json:"is_moving"`
-	IsHovering     bool                `json:"is_hovering"`
-	IsLanded       bool                `json:"is_landed"`
-	IsGoingHome    bool                `json:"is_going_home"`
-	IsHomeReady    bool                `json:"is_home_ready"`
-	IsGPSFixed     bool                `json:"is_gps_ready"`
-	ReceivedStatus PyDroneFlyingStatus `json:"last_status"`
+	DroneName       string                    `json:"drone_name"`
+	IsPreparing     bool                      `json:"is_preparing"`
+	IsMoving        bool                      `json:"is_moving"`
+	IsHovering      bool                      `json:"is_hovering"`
+	IsLanded        bool                      `json:"is_landed"`
+	IsGoingHome     bool                      `json:"is_going_home"`
+	IsHomeReady     bool                      `json:"is_home_ready"`
+	IsGPSFixed      bool                      `json:"is_gps_ready"`
+	ReceivedStatus  PyDroneFlyingStatus       `json:"last_status"`
+	ReceivedAlert   PyDroneAlertStatus        `json:"last_alert"`
+	ReceivedNavHome PyDroneNavigateHomeStatus `json:"navigate_home_status"`
 }
 
 // SchedulerData Informations de l'autopîlote / planificateur de vol

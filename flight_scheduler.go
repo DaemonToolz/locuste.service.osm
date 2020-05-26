@@ -50,13 +50,15 @@ func initFlightSchedulerWorker() {
 				IsActive:    false,
 			},
 			DroneFlyingStatus: &DroneSummarizedStatus{
-				DroneName:      name,
-				IsMoving:       false,
-				IsHovering:     false,
-				IsLanded:       true, // Notre état par défaut, au sol
-				IsGoingHome:    false,
-				IsPreparing:    true,
-				ReceivedStatus: None,
+				DroneName:       name,
+				IsMoving:        false,
+				IsHovering:      false,
+				IsLanded:        true, // Notre état par défaut, au sol
+				IsGoingHome:     false,
+				IsPreparing:     true,
+				ReceivedStatus:  NoStatus,
+				ReceivedAlert:   None,
+				ReceivedNavHome: Unavailable,
 			},
 			OperationIndex:     0,
 			CurrentInstruction: nil,
@@ -100,12 +102,9 @@ func StartWorker(name string) {
 
 	log.Println("Démarrage pour l'unité ", name)
 
-	//var onUpdate bool = false
-	//var nextStep Event = Event(-1)
 SchedulerLoop:
 	for currentScheduler.Statuses.IsRunning {
-		//onUpdate = false
-		//nextStep = Event(-1)
+
 		select {
 		case input := <-(*currentScheduler.OnUpdateChannel):
 			switch input {
@@ -121,8 +120,9 @@ SchedulerLoop:
 					UpdateMapStatus(name, *currentScheduler)
 				}
 
-			case AskForUpdate, OnAutopilotOn, OnAutopilotOff, OnSimulation, OnNormal, SwitchedToManual, SwitchedToAutomatic:
-				go currentScheduler.FSM.OnEvent(input)
+			case OnTakeOff, OnLanding, OnGoHome, AskForUpdate, OnAutopilotOn, OnAutopilotOff, OnSimulation,
+				OnNormal, SwitchedToManual, SwitchedToAutomatic, OnFlyingStateUpdate:
+				go currentScheduler.FSM.OnEvent(input) // Tous les états prioritaires
 
 			default:
 				if currentScheduler.Statuses.IsActive {
@@ -290,6 +290,7 @@ func UpdateFlyingStatus(name string, input PyDroneFlyingStatus) {
 	DroneFlyingStatus[name] = input
 	flyingStatMutex.Unlock()
 	SendEventToScheduler(name, OnFlyingStateUpdate)
+
 	log.Println("Mise à jour des informations de vol ", name)
 }
 

@@ -229,7 +229,7 @@ func (sd *SchedulerData) UpdateMapStatus() {
 func (sd *SchedulerData) OnFlyingStateReceived() FuncResult {
 	log.Println("Informations de vol pour ", sd.DroneName, " mis à jour")
 	switch GetFlyingStatus(sd.DroneName) {
-	case None:
+	case NoStatus:
 		sd.DroneFlyingStatus.IsLanded = false
 		sd.DroneFlyingStatus.IsHovering = false
 		sd.DroneFlyingStatus.IsMoving = false
@@ -265,6 +265,7 @@ func (sd *SchedulerData) OnFlyingStateReceived() FuncResult {
 		sd.DroneFlyingStatus.IsGoingHome = false
 	}
 
+	TransmitFlyingStatusUpdate(sd.DroneFlyingStatus)
 	return OnSuccess
 }
 

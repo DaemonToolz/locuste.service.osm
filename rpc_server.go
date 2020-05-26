@@ -97,10 +97,12 @@ func (*RPCRegistry) GetBoundaries(_ *struct{}, reply *FlightBounds) error {
 // FlyingStatusUpdate mise à jour de l'état du drone (en vol)
 func (*RPCRegistry) FlyingStatusUpdate(data *DroneFlyingStatusMessage, _ *struct{}) error {
 	UpdateFlyingStatus(data.Name, data.Status)
+
 	return nil
 }
 
 // RestartModule Demande de redémarrage d'un module
+// Stratégie aggressive comparé au pooling via le ping
 func (*RPCRegistry) RestartModule(args *string, _ *struct{}) error {
 	log.Println("Demande de redémarrage du module :", *args)
 	// TODO : Logique à implémenter

@@ -141,6 +141,13 @@ func TransmitAutopilotUpdate(input *SchedulerSummarizedData) {
 	}
 }
 
+// TransmitFlyingStatusUpdate Transmet les mises à jour du pilote automatique
+func TransmitFlyingStatusUpdate(input *DroneSummarizedStatus) {
+	if client != nil {
+		client.Go("RPCRegistry.OnFlyingStatusUpdate", input, &RPCNullArg, nil)
+	}
+}
+
 // TransmitEvent Transmet une commande
 func TransmitEvent(command *DroneCommandMessage) {
 	if client != nil {
