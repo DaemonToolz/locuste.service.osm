@@ -18,6 +18,7 @@ func main() {
 	initDroneConfiguration()
 	initModuleRestartMapper()
 	prepareLogs()
+	pipeMain()
 	initFlightSchedulerWorker()
 
 	log.Print("Service de logging opérationnel")

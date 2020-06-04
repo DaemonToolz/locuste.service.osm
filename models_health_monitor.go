@@ -47,14 +47,15 @@ func AddOrUpdateModuleMapper(comp Component, function interface{}) {
 }
 
 // CallModuleRestart Fonction pour redémarrer un module
-func CallModuleRestart(comp Component) {
+func CallModuleRestart(comp Component) bool {
 	moduleMutex.Lock()
-
+	defer moduleMutex.Unlock()
 	if _, ok := ModuleRestartMapper[comp]; ok {
 		if result, ok := GlobalStatuses[comp]; !ok || (ok && !result) {
 			ModuleRestartMapper[comp].(func())()
+			return true
 		}
 
 	}
-	moduleMutex.Unlock()
+	return false
 }

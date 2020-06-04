@@ -62,4 +62,7 @@ func DefineClosestStartingPoint(coordinates FlightCoordinate) *Node {
 
 func defineFlightSector() {
 	// TODO
+	// After having found a way to create a stable
+	// Eulerian graph from the map, divide
+	// the map into n sectors (all independant)
 }

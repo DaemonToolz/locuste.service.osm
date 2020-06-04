@@ -115,7 +115,7 @@ SchedulerLoop:
 				break SchedulerLoop
 
 			case Idle:
-				if currentScheduler.Statuses.IsBusy == true {
+				if currentScheduler.Statuses.IsBusy {
 					currentScheduler.Statuses.IsBusy = false
 					UpdateMapStatus(name, *currentScheduler)
 				}
@@ -207,7 +207,6 @@ func OnCommandSuccess(identifier CommandIdentifier) {
 	if &scheduler != nil {
 		UpdateLastSuccess(identifier.Name, identifier.Command)
 		scheduler.SendEvent(OnCommandSuccessEvent)
-		//scheduler.SendEvent(PositionReached) //
 	}
 }
 

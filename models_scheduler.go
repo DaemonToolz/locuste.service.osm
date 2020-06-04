@@ -205,6 +205,12 @@ func (currentScheduler *SchedulerData) StopScheduler() {
 
 // SendEvent Envoi d'une nouvelle étape / événement
 func (currentScheduler *SchedulerData) SendEvent(event Event) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println(r)
+		}
+	}()
+
 	(*currentScheduler.OnUpdateChannel) <- event
 }
 
