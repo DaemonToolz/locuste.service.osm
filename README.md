@@ -1,8 +1,9 @@
 # Locuste Map Scheduler : locuste.service.osm
 LOCUSTE : Service ordonnanceur / Pilotage automatique / Gestionnaire de vol
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0f2fd8eb4b2149ae85807192e515e7ac)](https://www.codacy.com/manual/axel.maciejewski/locuste.service.osm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DaemonToolz/locuste.service.osm&amp;utm_campaign=Badge_Grade)
+<img width="2609" alt="locuste-scheduler-banner" src="https://user-images.githubusercontent.com/6602774/84285951-5aec9e80-ab3e-11ea-84a9-b5b8dd2f8aed.png">
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0f2fd8eb4b2149ae85807192e515e7ac)](https://www.codacy.com/manual/axel.maciejewski/locuste.service.osm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DaemonToolz/locuste.service.osm&amp;utm_campaign=Badge_Grade)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DaemonToolz_locuste.service.osm&metric=alert_status)](https://sonarcloud.io/dashboard?id=DaemonToolz_locuste.service.osm)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DaemonToolz_locuste.service.osm&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DaemonToolz_locuste.service.osm)
