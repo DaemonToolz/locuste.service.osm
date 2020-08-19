@@ -1,24 +1,47 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 )
 
-// ZMQDefinedFunc Noms des fonctions échangées Router <=> Dealer
-type ZMQDefinedFunc string
-
-// ZMQMessage Message envoyé entre les Dealers ZMQ
-type ZMQMessage struct {
-	Function ZMQDefinedFunc `json:"function"`
-	Params   []interface{}  `json:"params"`
-}
-
-// ZMQComponents Composants enregistrés (Avec ProcessID)
-var ZMQComponents map[Component]int
-var zmqProcessMutex sync.Mutex
+var zmqServerMapMutex sync.Mutex
+var zmqServerMap map[ZMQDefinedFunc]interface{}
 
 func init() {
-	ZMQComponents = make(map[Component]int)
+	zmqServerMap := make(map[ZMQDefinedFunc]interface{})
+
+	
+	zmqServerMap[ZFNRequestStatuses] = nil
+	zmqServerMap[ZFNNotifyScheduler] = nil
+	zmqServerMap[ZFNUpdateAutopilot] = nil
+	zmqServerMap[ZFNOnHomeChanged] = nil
+	zmqServerMap[ZFNFetchBoundaries] = nil
+	zmqServerMap[ZFNUpdateTarget] = nil
+	zmqServerMap[ZFNUpdateFlyingStatus] = nil
+	zmqServerMap[ZFNSendGoHomeCommandTo] = nil
+	zmqServerMap[ZFNSendTakeoffCommandTo] = nil
+	zmqServerMap[ZFNRequestStatusReply] = nil
+	
+}
+
+func callMappedZMQFunc(msg *ZMQMessage) {
+	if msg != nil {
+		if _, ok := zmqServerMap[msg.Function]; !ok {
+			trace(fmt.Sprintf("%s : %s", callFailure, "Méthode inconnue"))
+		}
+		zmqServerMapMutex.Lock()
+		defer func() {
+			zmqServerMapMutex.Unlock()
+			if r := recover(); r != nil {
+				trace(fmt.Sprintf("%s : %s", callFailure, r))
+			}
+		}()
+
+		zmqServerMap[msg.Function].(func(*[]interface{}))(&msg.Params)
+	} else {
+		trace(fmt.Sprintf("%s : %s", callFailure, "Message reçu malformé"))
+	}
 }
 
 // #region Function Client
@@ -43,16 +66,20 @@ const (
 	ZFNSendCommand ZMQDefinedFunc = "SendCommand"
 )
 
-func addOrUpdateZMQProcess(cpt Component, pid int) {
-	zmqProcessMutex.Lock()
-	defer zmqProcessMutex.Unlock()
-	ZMQComponents[cpt] = pid
+// ZRegister Enregistrer le processus ZMQ
+func ZRegister(params *[]interface{}) *ZMQMessage {
+	return &ZMQMessage{
+		Function: ZFNRegister,
+		Params:   make([]interface{}, 0),
+	}
 }
 
-func deleteZMQProcess(cpt Component) {
-	zmqProcessMutex.Lock()
-	defer zmqProcessMutex.Unlock()
-	delete(ZMQComponents, cpt)
+// ZRDisconnect Désenregistre le process associé à une file ZMQ
+func ZRDisconnect(params *[]interface{}) *ZMQMessage {
+	return &ZMQMessage{
+		Function: ZFNDisconnect,
+		Params:   make([]interface{}, 0),
+	}
 }
 
 // #endregion Function Client

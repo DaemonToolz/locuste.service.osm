@@ -38,6 +38,7 @@ func main() {
 	initModuleRestartMapper()
 	prepareLogs()
 	pipeMain()
+	initZMQ()
 	initFlightSchedulerWorker()
 
 	log.Print("Service de logging opérationnel")

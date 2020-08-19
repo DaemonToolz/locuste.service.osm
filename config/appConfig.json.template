@@ -1,5 +1,6 @@
 {
     "host":"127.0.0.1",
     "rpc_port":RPC_PORT_CLIENT,
-    "scheduler_port":RPC_PORT_SERVER
+    "scheduler_port":RPC_PORT_SERVER,
+    "osm_zmq_port": PORT_OSM_ZMQ
 }

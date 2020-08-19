@@ -10,10 +10,10 @@ import (
 
 // Config Objet lié au fichier de configuration appConfig
 type Config struct {
-	Host    string `json:"host"`
-	RPCPort int    `json:"rpc_port"`
-
-	SchedulerPort int `json:"scheduler_port"`
+	Host          string `json:"host"`
+	RPCPort       int    `json:"rpc_port"`
+	OSMZmqPort    int    `json:"osm_zmq_port"`
+	SchedulerPort int    `json:"scheduler_port"`
 }
 
 // Drones Objet lié au fichier de configuration drone_data
