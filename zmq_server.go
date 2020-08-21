@@ -107,6 +107,13 @@ func SendZMQMessage(toWhom *goczmq.Sock, lock *sync.Mutex, name string, payload 
 
 }
 
+// SendToZMQMessageChannel Envoi d'une commande au canal de synchronization dédié à ZMQ
+func SendToZMQMessageChannel(payload interface{}) {
+	zmqBrainCmdMutex.Lock()
+	defer zmqBrainCmdMutex.Unlock()
+	zmqCmdChannel <- payload
+}
+
 // DestroyZMQRouters Destruction de toutes les connectiques CZMQ
 func DestroyZMQRouters() {
 	defer func() {
